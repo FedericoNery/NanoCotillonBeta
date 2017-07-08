@@ -1,23 +1,25 @@
 import string
 
-def entradaScanner():
+def ingresoCodigoDeBarras():
     # Leo entrada del sistema
     try:
         print("Esperando lectura de scanner...")
-        codigo = input()
+        codigoDeBarras = input()
         print("Lectura de scanner recibida, OK!")
     except:
         return None
 
     # Verifico el codigo
-    if len( codigo ) == 13:
+    if len( codigoDeBarras ) == 13:
         try:
-            for s in codigo:
-                if s not in string.digits:
+            for digito in codigoDeBarras:
+                if digito not in string.digits:
                     return None
-            codigo = int(codigo)
+            codigoDeBarras = int(codigoDeBarras)
         except:
             return None
     else: return None
 
-    return codigo
+    return codigoDeBarras
+
+def

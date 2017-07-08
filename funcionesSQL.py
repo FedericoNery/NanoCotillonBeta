@@ -32,5 +32,3 @@ def ejecutarVariosComandos(comandoSQL):
 
 a = conectarConBaseDeDatos()
 b = tomarCursor()
-
-
