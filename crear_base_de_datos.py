@@ -1,6 +1,6 @@
-import funcionesSQL
-from funcionesSQL import baseDeDatos
-from funcionesSQL import cursorBaseDeDatos
+import funciones_SQLite
+from funciones_SQLite import baseDeDatos
+from funciones_SQLite import cursorBaseDeDatos
 
 def comandoSQLParaCrearBaseDeDatosNueva():
     comandoSQL = """ CREATE TABLE IF NOT EXISTS AREAS(ID_AREA INTEGER PRIMARY KEY AUTOINCREMENT,NOMBRE_AREA TEXT);
@@ -29,9 +29,9 @@ def comandoSQLParaCrearBaseDeDatosNueva():
     return comandoSQL
 
 def crearBaseDeDatosNueva():
-    funcionesSQL.conectarConBaseDeDatos()
-    funcionesSQL.tomarCursor()
+    funciones_SQLite.conectarConBaseDeDatos()
+    funciones_SQLite.tomarCursor()
     comandoSQL = comandoSQLParaCrearBaseDeDatosNueva()
-    funcionesSQL.ejecutarVariosComandos(comandoSQL)
-    funcionesSQL.guardarBaseDeDatos(baseDeDatos)
+    funciones_SQLite.ejecutarVariosComandos(comandoSQL)
+    funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
 
