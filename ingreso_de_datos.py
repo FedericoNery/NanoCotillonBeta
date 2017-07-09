@@ -59,6 +59,8 @@ def ingresoNumeroDelCliente():
                 for digito in str(numeroDelCliente):
                     if digito not in string.digits:
                         validacionDeIngreso = False
+                validacionDeIngreso = True
+                numeroDelCliente = int(numeroDelCliente)
             except:
                 print("ERROR!!")
                 validacionDeIngreso = False
@@ -74,44 +76,23 @@ def ingresoNombre(nombreDelCampo):
     validacionDeIngreso = False
     while (not validacionDeIngreso):
         if(type(nombreDelCampo) is str):
+
             try:
                 nombre = input('Esperando ingreso del nombre de {}...'.format(nombreDelCampo))
                 print('Ingreso de nombre de {}, OK!'.format(nombreDelCampo))
-                validacionDeIngreso = True
+                if(type(nombre)is str):
+                    validacionDeIngreso = True
             except:
                 print("ERROR!!")
                 validacionDeIngreso = False
+
         else:
             print("ERROR!!")
             validacionDeIngreso = False
 
     return nombre
 
-"""
-def ingresoNombreDelCliente(nombreDelCampo):
-    try:
-        print("Esperando ingreso del nombre del cliente...")
-        nombreDelCliente = input()
-        print("Ingreso de nombre del cliente, OK!")
-    except:
-        return None
 
-def ingresoNombreDeArticulo():
-    try:
-        print("Esperando ingreso del nombre del articulo...")
-        nombreDelArticulo = input()
-        print("Ingreso del nombre del articulo, OK!")
-    except:
-        return None
 
-def ingresoNombreDeLaMarca():
-    try:
-        print("Esperando ingreso del nombre de la marca...")
-        nombreDeLaMarca = input()
-        print("Ingreso del nombre de la marca, OK!")
-    except:
-        return None
-
-"""
 
 
