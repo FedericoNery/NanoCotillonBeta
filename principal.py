@@ -1,6 +1,7 @@
-import crear_base_de_datos
+import mostrar_menu_principal
 
 def principal():
-    crear_base_de_datos.crearBaseDeDatosNueva()
+    mostrar_menu_principal.mostrarMensajeDeBienvenida()
+    mostrar_menu_principal.mostrarMenuDeOpciones()
 
 principal()

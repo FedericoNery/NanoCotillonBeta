@@ -143,14 +143,29 @@ def determinarNumeroDeMarcaDelArticulo(nombreDeLaMarca):
         return ID_Marca[0]
 
     else:
+        return None
+        """
         comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA,ALTA_BAJA) VALUES("{}",1)'.format(nombreDeLaMarca)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+        funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
         comandoSQL = 'SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"'.format(nombreDeLaMarca)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
         ID_Marca = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
         return ID_Marca[0]
+        """
+def ingresoCantidadDeStock():
+    validacionDeIngreso = False
+    while(not validacionDeIngreso):
+        try:
+            cantidadDeStock = int(input("Esperando ingreso de stock..."))
+            if(cantidadDeStock < 0):
+                print("ERROR!!")
+                validacionDeIngreso = False
+            else:
 
-
-
-
+                validacionDeIngreso = True
+        except:
+            print("ERROR!!")
+            validacionDeIngreso = False
+    return cantidadDeStock
 
