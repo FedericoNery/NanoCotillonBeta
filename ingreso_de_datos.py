@@ -1,4 +1,7 @@
 import string
+import funciones_SQLite
+from funciones_SQLite import cursorBaseDeDatos
+from funciones_SQLite import baseDeDatos
 
 def ingresoCodigoDeBarras():
     # Leo entrada del sistema
@@ -92,6 +95,30 @@ def ingresoNombre(nombreDelCampo):
 
     return nombre
 
+def ingresoDeArea():
+    validacionDeIngreso = False
+    comandoSQL = 'SELECT * FROM AREAS;'
+    funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+    tablaDeAreas = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
+    comandoSQL = 'SELECT MAX(ID_AREA) FROM AREAS ;'
+    funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+    maximoIDdeArea = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
+    maximoIDdeArea = maximoIDdeArea[0]
+    print(tablaDeAreas)
+    print('El numero maximo de registros de areas es {}'.format(str(maximoIDdeArea)) )
+    while(not validacionDeIngreso):
+        try:
+            areaIngresada = int(input("Esperando ingreso de area..."))
+            if(areaIngresada <= maximoIDdeArea and areaIngresada > 0):
+                validacionDeIngreso = True
+            else:
+                print("ERROR!!")
+                validacionDeIngreso = False
+        except:
+            print("ERROR!!")
+            validacionDeIngreso = False
+
+    return areaIngresada
 
 
 

@@ -35,3 +35,4 @@ def crearBaseDeDatosNueva():
     funciones_SQLite.ejecutarVariosComandos(comandoSQL)
     funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
 
+crearBaseDeDatosNueva()
