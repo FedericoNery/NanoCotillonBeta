@@ -45,7 +45,6 @@ def ingresoDePrecio():
             validacionDeIngreso = False
     return precio
 
-
 def ingresoNumeroDelCliente():
     # Leo entrada del sistema
     validacionDeIngreso = False
@@ -119,6 +118,37 @@ def ingresoDeArea():
             validacionDeIngreso = False
 
     return areaIngresada
+
+def determinarNumeroDeMarcaDelArticulo(nombreDeLaMarca):
+    existeMarcaEnBaseDeDatos = False
+    comandoSQL = 'SELECT * FROM MARCAS;'
+    funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+    tablaDeMarcas = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
+    print(tablaDeMarcas)
+
+    for dato in tablaDeMarcas:
+        try:
+            if(dato[1] == nombreDeLaMarca):
+                existeMarcaEnBaseDeDatos = True
+            else:
+                existeMarcaEnBaseDeDatos = False
+        except:
+            existeMarcaEnBaseDeDatos = False
+
+    if(existeMarcaEnBaseDeDatos):
+        comandoSQL = 'SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"'.format(nombreDeLaMarca)
+        funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+        ID_Marca = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
+        return ID_Marca[0]
+
+    else:
+        comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA,ALTA_BAJA) VALUES("{}",1)'.format(nombreDeLaMarca)
+        funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+        comandoSQL = 'SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"'.format(nombreDeLaMarca)
+        funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
+        ID_Marca = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
+        return ID_Marca[0]
+
 
 
 
