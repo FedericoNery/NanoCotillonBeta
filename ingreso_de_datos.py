@@ -82,6 +82,7 @@ def ingresoNombre(nombreDelCampo):
             try:
                 nombre = input('Esperando ingreso del nombre de {}...'.format(nombreDelCampo))
                 print('Ingreso de nombre de {}, OK!'.format(nombreDelCampo))
+                nombre = nombre.upper()
                 if(type(nombre)is str):
                     validacionDeIngreso = True
             except:
