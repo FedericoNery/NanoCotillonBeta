@@ -105,7 +105,6 @@ def ingresoDeArea():
     maximoIDdeArea = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
     maximoIDdeArea = maximoIDdeArea[0]
     print(tablaDeAreas)
-    print('El numero maximo de registros de areas es {}'.format(str(maximoIDdeArea)) )
     while(not validacionDeIngreso):
         try:
             areaIngresada = int(input("Esperando ingreso de area..."))
@@ -125,8 +124,6 @@ def determinarNumeroDeMarcaDelArticulo(nombreDeLaMarca):
     comandoSQL = 'SELECT * FROM MARCAS;'
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaDeMarcas = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
-    print(tablaDeMarcas)
-
     for dato in tablaDeMarcas:
         try:
             if(dato[1] == nombreDeLaMarca):

@@ -2,6 +2,7 @@ import ingreso_de_datos
 import funciones_SQLite
 import funciones_para_modificar_articulo
 from eliminarRegistros import verificarSiExisteCliente
+from eliminarRegistros import verificarSiExisteMarca
 from funciones_SQLite import baseDeDatos
 from funciones_SQLite import cursorBaseDeDatos
 
@@ -42,6 +43,15 @@ def modificarCliente():
     else:
         print("No existe ese cliente")
 
+def modificarMarca():
+    nombreAModificar = ingreso_de_datos.ingresoNombre("Marca")
+    existeMarca = verificarSiExisteMarca(nombreAModificar)
+    if (existeMarca):
+        comandoSQL = 'UPDATE MARCAS SET(NOMBRE_MARCA = "{}")'.format(nombreAModificar)
+        funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
+        funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
+    else:
+        print("No existe ese cliente")
 
 def extraerDatosDelArticuloAModificar():
     codigoDeBarras = ingreso_de_datos.ingresoCodigoDeBarras()
@@ -70,5 +80,4 @@ def validacionDeModificacion(nombreDelCampoAModificar):
         except:
             print("ERROR!!")
             validacionDeIngreso = False
-
 
