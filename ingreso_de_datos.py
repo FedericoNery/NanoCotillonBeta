@@ -150,6 +150,7 @@ def determinarNumeroDeMarcaDelArticulo(nombreDeLaMarca):
         ID_Marca = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
         return ID_Marca[0]
         """
+
 def ingresoCantidadDeStock():
     validacionDeIngreso = False
     while(not validacionDeIngreso):
@@ -166,3 +167,9 @@ def ingresoCantidadDeStock():
             validacionDeIngreso = False
     return cantidadDeStock
 
+def ingresoDeFecha():
+    validacionDeIngreso = False
+    try:
+        fechaIngresada = input("Ingrese la fecha")
+    except:
+        validacionDeIngreso = False
