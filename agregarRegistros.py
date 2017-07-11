@@ -18,7 +18,7 @@ def agregarArticulo():
         if (existeMarca):
             numeroDeMarcaDelArticulo = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeLaMarcaDelArticulo)
         else:
-            comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA) VALUES("{}")'.format(nombreDeLaMarcaDelArticulo)
+            comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA,ALTA_BAJA) VALUES("{}",1)'.format(nombreDeLaMarcaDelArticulo)
             funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
             funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
 
