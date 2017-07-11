@@ -40,3 +40,4 @@ def modificarArea(antiguaArea):
     else:
         nuevaArea = antiguaArea
     return nuevaArea
+
