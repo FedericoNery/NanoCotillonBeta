@@ -36,4 +36,7 @@ def seleccionarOpcionDelMenuElegida(numeroDeOpcion):
         eliminarRegistros.eliminarCliente()
     elif(numeroDeOpcion == 9):
         eliminarRegistros.eliminarMarca()
+    elif(numeroDeOpcion == 13):
+
+
 

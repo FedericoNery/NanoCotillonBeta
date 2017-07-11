@@ -3,23 +3,25 @@ import funciones_SQLite
 from funciones_SQLite import baseDeDatos
 from funciones_SQLite import cursorBaseDeDatos
 from eliminarRegistros import verificarSiExisteMarca
+
 def agregarArticulo():
     codigoDeBarras = ingreso_de_datos.ingresoCodigoDeBarras()
-
-
     validacionParaAgregarRegistro = verificarQueNoExistaElArticulo(codigoDeBarras)
+
     if(validacionParaAgregarRegistro):
         nombreDelArticulo = ingreso_de_datos.ingresoNombre("Articulo")
         nombreDeLaMarcaDelArticulo = ingreso_de_datos.ingresoNombre("Marca")
         precioDelArticulo = ingreso_de_datos.ingresoDePrecio()
         numeroDeAreaDelArticulo = ingreso_de_datos.ingresoDeArea()
         existeMarca = verificarSiExisteMarca(nombreDeLaMarcaDelArticulo)
+
         if (existeMarca):
             numeroDeMarcaDelArticulo = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeLaMarcaDelArticulo)
         else:
             comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA) VALUES("{}")'.format(nombreDeLaMarcaDelArticulo)
             funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
             funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
+
         numeroDeMarcaDelArticulo = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeLaMarcaDelArticulo)
         stockDelArticulo = ingreso_de_datos.ingresoCantidadDeStock()
 
@@ -34,8 +36,9 @@ def agregarArticulo():
 def agregarMarca():
     nombreDeLaMarca = ingreso_de_datos.ingresoNombre("Marca")
     numeroDeIDDeLaMarca = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeLaMarca)
+
     if(numeroDeIDDeLaMarca == None):
-        comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA) VALUES("{}")'.format(nombreDeLaMarca)
+        comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA,ALTA_BAJA) VALUES("{}",1)'.format(nombreDeLaMarca)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
         funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
     else:
@@ -44,9 +47,10 @@ def agregarMarca():
 def agregarCliente():
     nombreDelCliente = ingreso_de_datos.ingresoNombre("Cliente")
     noExisteCliente = verificarQueNoExistaElCliente(nombreDelCliente)
+
     if(noExisteCliente):
         numeroDeTelefonoDelCliente = ingreso_de_datos.ingresoNumeroDelCliente()
-        comandoSQL = 'INSERT INTO CLIENTES(NOMBRE,NUMERO_TELEFONO) VALUES("{}",{});'.format(nombreDelCliente,numeroDeTelefonoDelCliente)
+        comandoSQL = 'INSERT INTO CLIENTES(NOMBRE,NUMERO_TELEFONO,ALTA_BAJA) VALUES("{}",{},1);'.format(nombreDelCliente,numeroDeTelefonoDelCliente)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
         funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
     else:
@@ -56,6 +60,7 @@ def verificarQueNoExistaElCliente(nombreDelCliente):
     comandoSQL = 'SELECT NOMBRE FROM CLIENTES;'
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaNombresDeClientes = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
+
     for nombre in tablaNombresDeClientes:
         if(nombre[0] == nombreDelCliente):
             return False
@@ -65,6 +70,7 @@ def verificarQueNoExistaElArticulo(codigoDeBarras):
     comandoSQL = 'SELECT CODIGO_DE_BARRA FROM ARTICULOS;'
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaConCodigosDeBarra = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
+
     for codigo in tablaConCodigosDeBarra:
         if(codigo[0] == int(codigoDeBarras)):
             return False
