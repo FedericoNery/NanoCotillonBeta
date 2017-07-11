@@ -25,18 +25,17 @@ def seleccionarOpcionDelMenuElegida(numeroDeOpcion):
     elif(numeroDeOpcion == 3):
         agregarRegistros.agregarMarca()
     elif(numeroDeOpcion == 4):
-        modificarRegistros.modificarArticulo()
-    elif(numeroDeOpcion == 5):
-        modificarRegistros.modificarCliente()
-    elif(numeroDeOpcion == 6):
-        modificarRegistros.modificarMarca()
-    elif(numeroDeOpcion == 7):
         eliminarRegistros.eliminarArticulo()
-    elif(numeroDeOpcion == 8):
+    elif(numeroDeOpcion == 5):
         eliminarRegistros.eliminarCliente()
-    elif(numeroDeOpcion == 9):
+    elif(numeroDeOpcion == 6):
         eliminarRegistros.eliminarMarca()
-    elif(numeroDeOpcion == 13):
+    elif(numeroDeOpcion == 7):
+        modificarRegistros.modificarArticulo()
+    elif(numeroDeOpcion == 8):
+        modificarRegistros.modificarCliente()
+    elif(numeroDeOpcion == 9):
+        modificarRegistros.modificarMarca()
 
 
 

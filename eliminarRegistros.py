@@ -13,7 +13,7 @@ def eliminarCliente():
     nombreCliente = ingreso_de_datos.ingresoNombre("Cliente")
     existeCliente = verificarSiExisteCliente(nombreCliente)
     if(existeCliente):
-        comandoSQL = 'UPDATE CLIENTES SET ALTA_BAJA = 0 WHERE NOMBRE_CLIENTE = "{}"'.format(nombreCliente)
+        comandoSQL = 'UPDATE CLIENTES SET ALTA_BAJA = 0 WHERE NOMBRE = "{}"'.format(nombreCliente)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
         funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
     else:
