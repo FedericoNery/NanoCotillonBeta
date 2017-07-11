@@ -69,8 +69,9 @@ def modificarMarca():
     nombreAModificar = ingreso_de_datos.ingresoNombre("Marca a modificar")
     existeMarca = verificarSiExisteMarca(nombreAModificar)
     if (existeMarca):
+        IDMarcaAntiguo = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreAModificar)
         nombreNuevo = ingreso_de_datos.ingresoNombre("Nueva Marca")
-        comandoSQL = 'UPDATE MARCAS SET NOMBRE_MARCA = "{}"'.format(nombreNuevo)
+        comandoSQL = 'UPDATE MARCAS SET NOMBRE_MARCA = "{}" WHERE ID_MARCA = {} '.format(nombreNuevo,IDMarcaAntiguo)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
         funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
     else:
