@@ -1,6 +1,8 @@
 import agregarRegistros
 import modificarRegistros
 import eliminarRegistros
+import facturacion
+import crear_base_de_datos
 
 def ingresoOpcionDelMenuElegida():
     validacionDeIngreso = False
@@ -36,6 +38,13 @@ def seleccionarOpcionDelMenuElegida(numeroDeOpcion):
         modificarRegistros.modificarCliente()
     elif(numeroDeOpcion == 9):
         modificarRegistros.modificarMarca()
+    elif(numeroDeOpcion == 10):
+        facturacion.crearFactura()
+    elif(numeroDeOpcion == 11):
+        facturacion.imprimirFactura()
+    elif(numeroDeOpcion == 12):
+        crear_base_de_datos.crearBaseDeDatosNueva()
+
 
 
 
