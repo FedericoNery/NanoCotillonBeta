@@ -31,3 +31,8 @@ def buscarPorPalabraClave():
 
 def buscarPorFechaDeActualizacion():
     fechaDeIngreso = ingreso_de_datos.ingresoFecha()
+    comandoSQL = 'SELECT * FROM ARTICULOS WHERE FECHA = {}'.format(fechaDeIngreso)
+    funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+    tablaArticulosPorFecha = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
+    print(tablaArticulosPorFecha)
+

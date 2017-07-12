@@ -1,3 +1,4 @@
+import time
 import string
 import funciones_SQLite
 from funciones_SQLite import cursorBaseDeDatos
@@ -167,9 +168,15 @@ def ingresoCantidadDeStock():
             validacionDeIngreso = False
     return cantidadDeStock
 
-def ingresoDeFecha():
-    validacionDeIngreso = False
-    try:
-        fechaIngresada = input("Ingrese la fecha")
-    except:
-        validacionDeIngreso = False
+def ingresoYValidacionDeFecha():
+    validacionIngreso = False
+    while(not validacionIngreso):
+        fechaIngresada = input("Ingrese fecha: ")
+        for format in ['%d/%m/%Y', '%d/%m/%y']:
+            try:
+                result = time.strptime(fechaIngresada, format)
+                validacionIngreso = True
+            except:
+                validacionIngreso = False
+                print("ERROR!!")
+    return fechaIngresada
