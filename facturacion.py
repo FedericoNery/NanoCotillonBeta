@@ -9,6 +9,11 @@ import agregarRegistros
 def crearFactura():
     idDeUltimaFactura = extraerIDDeLaUltimaFactura()
 
+    nombreDelCliente = ingreso_de_datos.ingresoNombre("Cliente")
+    existeCliente = verificarSiExisteCliente(nombreDelCliente)
+    if (not existeCliente):
+        agregarRegistros.agregarCliente()
+
     validacionSeguirFacturando = True
     while(validacionSeguirFacturando):
         codigoDeBarras = ingreso_de_datos.ingresoCodigoDeBarras()
@@ -21,12 +26,8 @@ def crearFactura():
         cantidadDelArticulo = int(cantidadDelArticulo)
 
         sePoseeElStockDeseado = verificarStockDisponible(codigoDeBarras,cantidadDelArticulo)
-        if(sePoseeElStockDeseado):
-            nombreDelCliente = ingreso_de_datos.ingresoNombre("Cliente")
-            existeCliente = verificarSiExisteCliente(nombreDelCliente)
 
-            if(not existeCliente):
-                agregarRegistros.agregarCliente()
+        if(sePoseeElStockDeseado):
 
             comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA,ARTICULOS.NOMBRE_ARTICULO,' \
                      ' MARCAS.ID_MARCA, ARTICULOS.PRECIO FROM ARTICULOS,MARCAS WHERE ARTICULOS.CODIGO_DE_BARRA = {}'.format(codigoDeBarras)
