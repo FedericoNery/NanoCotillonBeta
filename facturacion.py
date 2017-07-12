@@ -44,6 +44,12 @@ def crearFactura():
             funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
             funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
             validacionSeguirFacturando = deseaSeguirIngresandoArticulosALaFactura()
+
+            comandoSQL = 'UPDATE ARTICULOS SET STOCK = (SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {})-{} ' \
+                         'WHERE CODIGO_DE_BARRA = {}'.format(cantidadDelArticulo,codigoDeBarras,codigoDeBarras)
+            funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+            funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
+
         else:
             validacionSeguirFacturando = deseaSeguirIngresandoArticulosALaFactura()
 
