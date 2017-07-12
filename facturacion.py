@@ -16,32 +16,35 @@ def crearFactura():
         if(not existeArticulo):
             agregarRegistros.agregarArticulo()
 
-
         print("Ingrese stock deseado")
         cantidadDelArticulo = ingreso_de_datos.ingresoCantidadDeStock()
         cantidadDelArticulo = int(cantidadDelArticulo)
 
-        nombreDelCliente = ingreso_de_datos.ingresoNombre("Cliente")
-        existeCliente = verificarSiExisteCliente(nombreDelCliente)
+        sePoseeElStockDeseado = verificarStockDisponible(codigoDeBarras,cantidadDelArticulo)
+        if(sePoseeElStockDeseado):
+            nombreDelCliente = ingreso_de_datos.ingresoNombre("Cliente")
+            existeCliente = verificarSiExisteCliente(nombreDelCliente)
 
-        if(not existeCliente):
-            agregarRegistros.agregarCliente()
+            if(not existeCliente):
+                agregarRegistros.agregarCliente()
 
-        comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA,ARTICULOS.NOMBRE_ARTICULO,' \
+            comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA,ARTICULOS.NOMBRE_ARTICULO,' \
                      ' MARCAS.ID_MARCA, ARTICULOS.PRECIO FROM ARTICULOS,MARCAS WHERE ARTICULOS.CODIGO_DE_BARRA = {}'.format(codigoDeBarras)
-        funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
-        articuloConsultado = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
-        codigoDeBarrasDelArticulo = articuloConsultado[0]
-        precioDelArticulo = articuloConsultado[3]
+            funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+            articuloConsultado = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
+            codigoDeBarrasDelArticulo = articuloConsultado[0]
+            precioDelArticulo = articuloConsultado[3]
 
-        comandoSQL = 'INSERT INTO ART_FACT(ID_ART,ID_FACT,CANTIDAD,PRECIO) VALUES({},{},{},{});'\
-        .format(codigoDeBarrasDelArticulo,str(idDeUltimaFactura),cantidadDelArticulo,str(precioDelArticulo))
-        funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+            comandoSQL = 'INSERT INTO ART_FACT(ID_ART,ID_FACT,CANTIDAD,PRECIO) VALUES({},{},{},{});'\
+            .format(codigoDeBarrasDelArticulo,str(idDeUltimaFactura),cantidadDelArticulo,str(precioDelArticulo))
+            funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
 
-        comandoSQL = 'INSERT INTO FACTURAS (ID_CLIENTE) VALUES ((SELECT ID FROM CLIENTES WHERE NOMBRE = "{}"));'.format(nombreDelCliente)
-        funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
-        funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
-        validacionSeguirFacturando = deseaSeguirIngresandoArticulosALaFactura()
+            comandoSQL = 'INSERT INTO FACTURAS (ID_CLIENTE) VALUES ((SELECT ID FROM CLIENTES WHERE NOMBRE = "{}"));'.format(nombreDelCliente)
+            funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+            funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
+            validacionSeguirFacturando = deseaSeguirIngresandoArticulosALaFactura()
+        else:
+            validacionSeguirFacturando = deseaSeguirIngresandoArticulosALaFactura()
 
 def extraerIDDeLaUltimaFactura():
     comandoSQL = 'SELECT MAX(ID_FACT) FROM ART_FACT;'
@@ -133,6 +136,17 @@ def verificarQueExistaElArticulo(codigoDeBarra):
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     articuloBuscado = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
     if(articuloBuscado == None):
+        return False
+    else:
+        return True
+
+def verificarStockDisponible(codigoDeBarra,stockDeseado):
+    comandoSQL = 'SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {};'
+    funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
+    stockDisponible = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
+    stockDisponible = stockDisponible[0]
+    if(stockDisponible < stockDeseado):
+        print("Solo quedan disponibles {} unidades".format(stockDisponible))
         return False
     else:
         return True
