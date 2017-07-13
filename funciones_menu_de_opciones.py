@@ -2,6 +2,7 @@ import agregarRegistros
 import modificarRegistros
 import eliminarRegistros
 import facturacion
+import consultarRegistros
 import crear_base_de_datos
 
 def ingresoOpcionDelMenuElegida():
@@ -9,7 +10,7 @@ def ingresoOpcionDelMenuElegida():
     while(not validacionDeIngreso):
         try:
             numeroDeOpcion = int(input("Ingrese el numero de opcion: "))
-            if(numeroDeOpcion > 0 and numeroDeOpcion < 10):
+            if(numeroDeOpcion > 0 and numeroDeOpcion < 16):
                 validacionDeIngreso = True
                 return numeroDeOpcion
             else:
@@ -42,6 +43,12 @@ def seleccionarOpcionDelMenuElegida(numeroDeOpcion):
         facturacion.crearFactura()
     elif(numeroDeOpcion == 11):
         facturacion.imprimirFactura()
+    elif(numeroDeOpcion == 13):
+        consultarRegistros.buscarPrecioDeUnArticulo()
+    elif(numeroDeOpcion == 14):
+        consultarRegistros.buscarPorPalabraClave()
+    elif(numeroDeOpcion == 15):
+        consultarRegistros.buscarPorArea()
     elif(numeroDeOpcion == 12):
         crear_base_de_datos.crearBaseDeDatosNueva()
 

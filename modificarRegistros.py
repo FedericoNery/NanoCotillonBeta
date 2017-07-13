@@ -32,18 +32,12 @@ def modificarArticulo():
         funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
 
     if(nombreDeMarcaNuevo != antiguoIDMarca):
-        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,' \
-                 'ARTICULO_MARCA = (SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"),' \
-                 'ARTICULO_AREA = {} ,STOCK = {}' \
-                 ' WHERE CODIGO_DE_BARRA = {} ;'\
+        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,ARTICULO_MARCA = (SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"),ARTICULO_AREA = {} ,STOCK = {} WHERE CODIGO_DE_BARRA = {} ;'\
         .format(nombreNuevo,str(precioNuevo),nombreDeMarcaNuevo,str(areaNueva),str(stockNuevo),str(codigoDeBarras))
 
     else:
 
-        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,' \
-                 'ARTICULO_MARCA = {},' \
-                 'ARTICULO_AREA = {} ,STOCK = {}' \
-                 'WHERE CODIGO_DE_BARRA = {} ;'\
+        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,ARTICULO_MARCA = {},ARTICULO_AREA = {} ,STOCK = {} WHERE CODIGO_DE_BARRA = {} ;'\
         .format(nombreNuevo,str(precioNuevo),nombreDeMarcaNuevo,str(areaNueva),str(stockNuevo),str(codigoDeBarras))
 
 
@@ -79,8 +73,7 @@ def modificarMarca():
 
 def extraerDatosDelArticuloAModificar():
     codigoDeBarras = ingreso_de_datos.ingresoCodigoDeBarras()
-    comandoSQL = "SELECT NOMBRE_ARTICULO,PRECIO,ARTICULO_MARCA,ARTICULO_AREA,STOCK,CODIGO_DE_BARRA" \
-                 " FROM ARTICULOS WHERE CODIGO_DE_BARRA = {}".format(str(codigoDeBarras))
+    comandoSQL = "SELECT NOMBRE_ARTICULO,PRECIO,ARTICULO_MARCA,ARTICULO_AREA,STOCK,CODIGO_DE_BARRA FROM ARTICULOS WHERE CODIGO_DE_BARRA = {}".format(str(codigoDeBarras))
     funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
     tablaDatosDelArticulo = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
 

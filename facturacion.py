@@ -12,6 +12,7 @@ def crearFactura():
     nombreDelCliente = ingreso_de_datos.ingresoNombre("Cliente")
     existeCliente = verificarSiExisteCliente(nombreDelCliente)
     if (not existeCliente):
+        print("No existe el cliente, debe agregarlo")
         agregarRegistros.agregarCliente()
 
     validacionSeguirFacturando = True
@@ -29,8 +30,7 @@ def crearFactura():
 
         if(sePoseeElStockDeseado):
 
-            comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA,ARTICULOS.NOMBRE_ARTICULO,' \
-                     ' MARCAS.ID_MARCA, ARTICULOS.PRECIO FROM ARTICULOS,MARCAS WHERE ARTICULOS.CODIGO_DE_BARRA = {}'.format(codigoDeBarras)
+            comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA,ARTICULOS.NOMBRE_ARTICULO,MARCAS.ID_MARCA, ARTICULOS.PRECIO FROM ARTICULOS,MARCAS WHERE ARTICULOS.CODIGO_DE_BARRA = {}'.format(codigoDeBarras)
             funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
             articuloConsultado = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
             codigoDeBarrasDelArticulo = articuloConsultado[0]
@@ -40,13 +40,12 @@ def crearFactura():
             .format(codigoDeBarrasDelArticulo,str(idDeUltimaFactura),cantidadDelArticulo,str(precioDelArticulo))
             funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
 
-            comandoSQL = 'INSERT INTO FACTURAS (ID_CLIENTE) VALUES ((SELECT ID FROM CLIENTES WHERE NOMBRE = "{}"));'.format(nombreDelCliente)
+            comandoSQL = 'INSERT INTO FACTURAS (ID_CLIENTE) VALUES ((SELECT ID_CLIENTE FROM CLIENTES WHERE NOMBRE = "{}"));'.format(nombreDelCliente)
             funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
             funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
             validacionSeguirFacturando = deseaSeguirIngresandoArticulosALaFactura()
 
-            comandoSQL = 'UPDATE ARTICULOS SET STOCK = (SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {})-{} ' \
-                         'WHERE CODIGO_DE_BARRA = {}'.format(cantidadDelArticulo,codigoDeBarras,codigoDeBarras)
+            comandoSQL = 'UPDATE ARTICULOS SET STOCK = (SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {})-{} WHERE CODIGO_DE_BARRA = {}'.format(cantidadDelArticulo,codigoDeBarras,codigoDeBarras)
             funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
             funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
 
@@ -57,7 +56,10 @@ def extraerIDDeLaUltimaFactura():
     comandoSQL = 'SELECT MAX(ID_FACT) FROM ART_FACT;'
     funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
     idDeUltimaFactura = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
-    idDeUltimaFactura = idDeUltimaFactura[0] + 1
+    if(idDeUltimaFactura[0] == None):
+        idDeUltimaFactura = 1
+    else:
+        idDeUltimaFactura = idDeUltimaFactura[0] + 1
     return idDeUltimaFactura
 
 def deseaSeguirIngresandoArticulosALaFactura():
@@ -83,18 +85,16 @@ def imprimirFactura():
     comandoSQL = 'SELECT FECHA FROM FACTURAS WHERE ID_FACTURA={}'.format(str(numeroDeFacturaDeseada))
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     fechaDeLaFactura = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
-    fechaDeLaFactura = fechaDeLaFactura[0]
-    fechaDeLaFactura = datetime.strptime("2017-06-07 23:06:28", "%Y-%m-%d %H:%M:%S")
+    #fechaDeLaFactura = fechaDeLaFactura[0]
+    #fechaDeLaFactura = datetime.strptime("2017-06-07 23:06:28", "%Y-%m-%d %H:%M:%S")
     fechaDeLaFactura = fechaDeLaFactura.strftime("%d/%m/%y")
 
 
-    comandoSQL = 'SELECT FACTURAS.ID_CLIENTE, CLIENTES.NOMBRE FROM FACTURAS INNER JOIN CLIENTES ON FACTURAS.ID_CLIENTE = CLIENTES.ID_CLIENTE ' \
-                 'WHERE FACTURAS.ID_FACTURAS = {};'.format(numeroDeFacturaDeseada)
+    comandoSQL = 'SELECT FACTURAS.ID_CLIENTE, CLIENTES.NOMBRE FROM FACTURAS INNER JOIN CLIENTES ON FACTURAS.ID_CLIENTE = CLIENTES.ID_CLIENTE WHERE FACTURAS.ID_FACTURAS = {};'.format(numeroDeFacturaDeseada)
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaFechaYNumeroDeCliente = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
     numeroDeCliente = tablaFechaYNumeroDeCliente[0]
-    comandoSQL = 'SELECT ART_FACT.ID_ART,ARTICULOS.NOMBRE_ARTICULO,ART_FACT.CANTIDAD,ART_FACT.PRECIO FROM ART_FACT ' \
-                 'INNER JOIN ARTICULOS ON ARTICULOS.CODIGO_DE_BARRA = ART_FACT.ID_ART WHERE ID_FACT ={};'.format(str(numeroDeFacturaDeseada))
+    comandoSQL = 'SELECT ART_FACT.ID_ART,ARTICULOS.NOMBRE_ARTICULO,ART_FACT.CANTIDAD,ART_FACT.PRECIO FROM ART_FACT INNER JOIN ARTICULOS ON ARTICULOS.CODIGO_DE_BARRA = ART_FACT.ID_ART WHERE ID_FACT ={};'.format(str(numeroDeFacturaDeseada))
     funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
     tablaArticulosFacturas = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
 
@@ -148,7 +148,7 @@ def verificarQueExistaElArticulo(codigoDeBarra):
         return True
 
 def verificarStockDisponible(codigoDeBarra,stockDeseado):
-    comandoSQL = 'SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {};'
+    comandoSQL = 'SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {};'.format(codigoDeBarra)
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     stockDisponible = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
     stockDisponible = stockDisponible[0]

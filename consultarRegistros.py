@@ -5,9 +5,7 @@ from funciones_SQLite import cursorBaseDeDatos
 
 def buscarPrecioDeUnArticulo():
     codigoDeBarrasDelArticuloBuscado = ingreso_de_datos.ingresoCodigoDeBarras()
-    comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA, ARTICULOS.NOMBRE_ARTICULO, ARTICULOS.PRECIO, MARCAS.NOMBRE_MARCA' \
-                 'FROM ARTICULOS INNER JOIN MARCAS ON ARTICULO_MARCA = ID_MARCA ' \
-                 'WHERE CODIGO_DE_BARRA ={}'.format(codigoDeBarrasDelArticuloBuscado)
+    comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA, ARTICULOS.NOMBRE_ARTICULO, ARTICULOS.PRECIO, MARCAS.NOMBRE_MARCA FROM (ARTICULOS) INNER JOIN MARCAS ON ARTICULO_MARCA = ID_MARCA WHERE CODIGO_DE_BARRA ={};'.format(codigoDeBarrasDelArticuloBuscado)
 
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     articuloBuscado = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
@@ -15,15 +13,16 @@ def buscarPrecioDeUnArticulo():
 
 def buscarPorArea():
     numeroDeArea = ingreso_de_datos.ingresoDeArea()
-    comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA, ARTICULOS.NOMBRE_ARTICULO, ARTICULOS.PRECIO, MARCAS.NOMBRE_MARCA ' \
-                 'FROM ARTICULOS INNER JOIN MARCAS ON ARTICULO_MARCA = ID_MARCA WHERE ARTICULO_AREA = {};'.format(numeroDeArea)
+    comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA, ARTICULOS.NOMBRE_ARTICULO, ARTICULOS.PRECIO, MARCAS.NOMBRE_MARCA FROM ARTICULOS INNER JOIN MARCAS ON ARTICULO_MARCA = ID_MARCA WHERE ARTICULO_AREA = {};'.format(numeroDeArea)
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaArticulosDelArea = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
     print(tablaArticulosDelArea)
 
 def buscarPorPalabraClave():
     palabraClave = ingreso_de_datos.ingresoNombre("palabra clave")
-    comandoSQL = 'SELECT * FROM ARTICULOS WHERE NOMBRE_ARTICULO LIKE "%{}" OR NOMBRE_ARTICULO LIKE "{}%" OR NOMBRE_ARTICULO LIKE "%{}%"'
+    palabraClave = palabraClave.upper()
+    comandoSQL = 'SELECT CODIGO_DE_BARRA,NOMBRE_ARTICULO FROM ARTICULOS WHERE NOMBRE_ARTICULO LIKE "%{}%";'.format(palabraClave,palabraClave,palabraClave)
+    #
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaArticulosPorPalabraClave = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
     print(tablaArticulosPorPalabraClave)

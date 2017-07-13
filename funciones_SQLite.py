@@ -5,7 +5,7 @@ cursorBaseDeDatos = None
 
 def conectarConBaseDeDatos():
     global baseDeDatos
-    baseDeDatos = sqlite3.connect("nuevaBase.db")
+    baseDeDatos = sqlite3.connect("C:/Users/Federico-PC/PycharmProjects/NanoCotillonBeta/nuevaBase.db")
     return baseDeDatos
 
 def tomarCursor():
