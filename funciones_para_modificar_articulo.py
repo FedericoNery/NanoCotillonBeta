@@ -28,7 +28,7 @@ def modificarMarca(antiguoMarca):
 def modificarStock(antiguoStock):
     modificacionDeStock = modificarRegistros.validacionDeModificacion("Stock")
     if (modificacionDeStock):
-        cantidadDeStockNuevo = ingreso_de_datos.ingresoDePrecio()
+        cantidadDeStockNuevo = ingreso_de_datos.ingresoCantidadDeStock()
     else:
         cantidadDeStockNuevo = antiguoStock
     return cantidadDeStockNuevo

@@ -10,12 +10,12 @@ from funciones_SQLite import cursorBaseDeDatos
 def modificarArticulo():
     tablaDatosDelArticulo = extraerDatosDelArticuloAModificar()
 
-    antiguoNombre = tablaDatosDelArticulo[0][0]
-    antiguoPrecio = tablaDatosDelArticulo[0][1]
-    antiguoIDMarca = tablaDatosDelArticulo[0][2]
-    antiguoIDArea = tablaDatosDelArticulo[0][3]
-    antiguoStock = tablaDatosDelArticulo[0][4]
-    codigoDeBarras = tablaDatosDelArticulo[0][5]
+    antiguoNombre = tablaDatosDelArticulo[0][0] #OK
+    antiguoPrecio = tablaDatosDelArticulo[0][1] #OK
+    antiguoIDMarca = tablaDatosDelArticulo[0][2]#OK
+    antiguoIDArea = tablaDatosDelArticulo[0][3]#OK
+    antiguoStock = tablaDatosDelArticulo[0][4]#OK
+    codigoDeBarras = tablaDatosDelArticulo[0][5]#OK
 
     mensaje = "¿Que campos desea modificar?"
 
@@ -26,7 +26,7 @@ def modificarArticulo():
     areaNueva = funciones_para_modificar_articulo.modificarArea(antiguoIDArea)#Ver futuros problemas
 
     numeroDeIDDeLaMarca = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeMarcaNuevo)
-    if (numeroDeIDDeLaMarca == None):
+    if (numeroDeIDDeLaMarca == None and nombreDeMarcaNuevo!=antiguoIDMarca):
         comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA,ALTA_BAJA) VALUES("{}",1)'.format(nombreDeMarcaNuevo)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
         funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
@@ -36,8 +36,7 @@ def modificarArticulo():
         .format(nombreNuevo,str(precioNuevo),nombreDeMarcaNuevo,str(areaNueva),str(stockNuevo),str(codigoDeBarras))
 
     else:
-
-        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,ARTICULO_MARCA = {},ARTICULO_AREA = {} ,STOCK = {} WHERE CODIGO_DE_BARRA = {} ;'\
+        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,ARTICULO_MARCA = (SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"),ARTICULO_AREA = {} ,STOCK = {} WHERE CODIGO_DE_BARRA = {} ;'\
         .format(nombreNuevo,str(precioNuevo),nombreDeMarcaNuevo,str(areaNueva),str(stockNuevo),str(codigoDeBarras))
 
 
@@ -92,7 +91,7 @@ def validacionDeModificacion(nombreDelCampoAModificar):
     while(not validacionDeIngreso):
         try:
             if(type(nombreDelCampoAModificar)is str):
-                modificar = input('¿Modifica {}? Ingrese "si" o "no"'.format(nombreDelCampoAModificar))
+                modificar = input('¿Modifica {}? Ingrese "si" o "no" '.format(nombreDelCampoAModificar))
                 modificar = modificar.upper()
 
                 if(modificar == 'SI'):

@@ -85,12 +85,12 @@ def imprimirFactura():
     comandoSQL = 'SELECT FECHA FROM FACTURAS WHERE ID_FACTURA={}'.format(str(numeroDeFacturaDeseada))
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     fechaDeLaFactura = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
-    #fechaDeLaFactura = fechaDeLaFactura[0]
-    #fechaDeLaFactura = datetime.strptime("2017-06-07 23:06:28", "%Y-%m-%d %H:%M:%S")
+    fechaDeLaFactura = fechaDeLaFactura[0]
+    fechaDeLaFactura = datetime.datetime.strptime(fechaDeLaFactura, "%Y-%m-%d %H:%M:%S")
     fechaDeLaFactura = fechaDeLaFactura.strftime("%d/%m/%y")
 
 
-    comandoSQL = 'SELECT FACTURAS.ID_CLIENTE, CLIENTES.NOMBRE FROM FACTURAS INNER JOIN CLIENTES ON FACTURAS.ID_CLIENTE = CLIENTES.ID_CLIENTE WHERE FACTURAS.ID_FACTURAS = {};'.format(numeroDeFacturaDeseada)
+    comandoSQL = 'SELECT FACTURAS.ID_CLIENTE, CLIENTES.NOMBRE FROM FACTURAS INNER JOIN CLIENTES ON FACTURAS.ID_CLIENTE = CLIENTES.ID_CLIENTE WHERE FACTURAS.ID_FACTURA = {};'.format(numeroDeFacturaDeseada)
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaFechaYNumeroDeCliente = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
     numeroDeCliente = tablaFechaYNumeroDeCliente[0]
@@ -103,7 +103,6 @@ def imprimirFactura():
     tablaCliente = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
 
     print("FECHA:{:<20} ".format(fechaDeLaFactura) + "Cliente:{:<20} " .format(tablaCliente[0]) )
-    print("Nro De CUIT:{:<14} " .format (str(tablaCliente[1]))+"Razon Social:{:<17} ".format(tablaCliente[2]))
 
     print("---------------------------------------------------------------------------------------------------")
     encabezado = ["Codigo de Producto","Nombre/Descripcion","Cantidad ","Precio Por Unidad","Total"]
