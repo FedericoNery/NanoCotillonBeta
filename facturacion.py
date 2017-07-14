@@ -5,6 +5,12 @@ import funciones_SQLite
 import datetime
 import ingreso_de_datos
 import agregarRegistros
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+
+
+
+
 
 def crearFactura():
     idDeUltimaFactura = extraerIDDeLaUltimaFactura()
@@ -118,6 +124,57 @@ def imprimirFactura():
     print("Subtotal:{}{} ".format("$",total))
     print("IVA:{}{}".format("$",total*0.21))
     print("Total:{}{}".format("$",total+total*0.21))
+
+    nombreDeArchivo = "factura{}.pdf".format(numeroDeFacturaDeseada)
+    canvasDelPDF = canvas.Canvas(nombreDeArchivo,pagesize=A4)
+    canvasDelPDF.setLineWidth(.3)
+    canvasDelPDF.setFont('Helvetica', 10)
+
+    canvasDelPDF.drawString(30, 750, 'NANO COTILLON')
+    canvasDelPDF.drawString(30, 735, 'ELSA EDIS CORREA')
+    canvasDelPDF.drawString(500, 750, 'Fecha: {}'.format(str(fechaDeLaFactura)))
+    canvasDelPDF.line(480, 747, 580, 747)
+
+    canvasDelPDF.drawString(400, 725, "Nombre de cliente:{}".format(tablaCliente[0]))
+    canvasDelPDF.line(378, 723, 580, 723)
+
+    canvasDelPDF.drawString(30, 703, 'Nro de factura:{}'.format(numeroDeFacturaDeseada))
+    canvasDelPDF.line(120, 700, 580, 700)
+    canvasDelPDF.drawString(30, 690,'-------------------------------------------------------------------------------------------------------------------------------------------')
+    canvasDelPDF.drawString(30, 670, encabezado[0])
+    canvasDelPDF.drawString(150, 670, encabezado[1])
+    canvasDelPDF.drawString(280, 670, encabezado[2])
+    canvasDelPDF.drawString(350, 670, encabezado[3])
+    canvasDelPDF.drawString(470, 670, encabezado[4])
+    j = 0
+    contador = 0
+    ejeY = 670
+    ejeX = 30
+    for j in tablaArticulosFacturas:
+        ejeY = ejeY - 25
+        ejeX = 30
+        canvasDelPDF.drawString(ejeX, ejeY, "{}".format(j[0]))
+        ejeX = 150
+        canvasDelPDF.drawString (ejeX,ejeY,"{}".format(j[1]))
+        ejeX = 280
+        canvasDelPDF.drawString (ejeX,ejeY,"{}".format(j[2]))
+        ejeX = 350
+        canvasDelPDF.drawString (ejeX,ejeY,"{}".format(j[3]))
+        ejeX = 470
+        canvasDelPDF.drawString(ejeX,ejeY,"${}".format(j[3]*j[2]))
+    ejeY = ejeY - 25
+    ejeX = 30
+    canvasDelPDF.drawString(ejeX,ejeY,'-----------------------------------------------------------------------------------------------------------------------------------------')
+    ejeY = ejeY - 25
+    canvasDelPDF.drawString(ejeX,ejeY,"Subtotal: ${}".format(total))
+    ejeY = ejeY - 25
+    canvasDelPDF.drawString(ejeX, ejeY, "IVA: ${}".format(total*0.21))
+    ejeY = ejeY - 25
+    canvasDelPDF.drawString(ejeX, ejeY, "Total: ${}".format(total+total*0.21))
+
+    canvasDelPDF.save()
+
+
 
 def obtenerNumeroDeFacturaDeseada():
     tablaNuevaDeNumerosDeFacturas = []
