@@ -29,10 +29,10 @@ def crearFactura():
             agregarRegistros.agregarArticulo()
 
         print("Ingrese stock deseado")
-        cantidadDelArticulo = ingreso_de_datos.ingresoCantidadDeStock()
-        cantidadDelArticulo = int(cantidadDelArticulo)
+        stockDeseadoDelArticulo = ingreso_de_datos.ingresoCantidadDeStock()
+        stockDeseadoDelArticulo = int(stockDeseadoDelArticulo)
 
-        sePoseeElStockDeseado = verificarStockDisponible(codigoDeBarras,cantidadDelArticulo)
+        sePoseeElStockDeseado = verificarStockDisponible(codigoDeBarras,stockDeseadoDelArticulo)
 
         if(sePoseeElStockDeseado):
 
@@ -43,7 +43,7 @@ def crearFactura():
             precioDelArticulo = articuloConsultado[3]
 
             comandoSQL = 'INSERT INTO ART_FACT(ID_ART,ID_FACT,CANTIDAD,PRECIO) VALUES({},{},{},{});'\
-            .format(codigoDeBarrasDelArticulo,str(idDeUltimaFactura),cantidadDelArticulo,str(precioDelArticulo))
+            .format(codigoDeBarrasDelArticulo,str(idDeUltimaFactura),stockDeseadoDelArticulo,str(precioDelArticulo))
             funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
 
             comandoSQL = 'INSERT INTO FACTURAS (ID_CLIENTE) VALUES ((SELECT ID_CLIENTE FROM CLIENTES WHERE NOMBRE = "{}"));'.format(nombreDelCliente)
@@ -51,7 +51,7 @@ def crearFactura():
             funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
             validacionSeguirFacturando = deseaSeguirIngresandoArticulosALaFactura()
 
-            comandoSQL = 'UPDATE ARTICULOS SET STOCK = (SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {})-{} WHERE CODIGO_DE_BARRA = {}'.format(cantidadDelArticulo,codigoDeBarras,codigoDeBarras)
+            comandoSQL = 'UPDATE ARTICULOS SET STOCK = (SELECT STOCK FROM ARTICULOS WHERE CODIGO_DE_BARRA = {})-{} WHERE CODIGO_DE_BARRA = {}'.format(codigoDeBarras,stockDeseadoDelArticulo,codigoDeBarras)
             funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
             funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
 
@@ -115,15 +115,15 @@ def imprimirFactura():
     print('|{:<20} '.format(encabezado[0]) + '|{:<20} '.format(encabezado[1]) + '|{:<20} '.format(encabezado[2]) + '|{:<20} '.format(encabezado[3])+ '|{:<9}|'.format(encabezado[4]))
 
     for i in tablaArticulosFacturas:
-       print('|{:<20} '.format(i[0]) +'|{:<20} '.format(i[1])+'|{:<20} '.format(i[2])+'|{:<20} '.format(i[3])+'|{}{:<8}|'.format("$",str(int(i[3])*int(i[2]))))
+       print('|{:<20} '.format(i[0]) +'|{:<20} '.format(i[1])+'|{:<20} '.format(i[2])+'|{:<20} '.format(i[3])+'|{}{:<8}|'.format("$",round(float(i[3])*float(i[2]),2)))
 
     print("---------------------------------------------------------------------------------------------------")
     for i in tablaArticulosFacturas:
-        total = int(i[3])*int(i[2]) + total
+        total = float(i[3])*float(i[2]) + total
 
-    print("Subtotal:{}{} ".format("$",total))
-    print("IVA:{}{}".format("$",total*0.21))
-    print("Total:{}{}".format("$",total+total*0.21))
+    print("Subtotal:${0:.2f} ".format(round(total,2)))
+    print("IVA:${0:.2f}".format(round(total*0.21,2)))
+    print("Total:${0:.2f}".format(round(total+total*0.21,2)))
 
     nombreDeArchivo = "factura{}.pdf".format(numeroDeFacturaDeseada)
     canvasDelPDF = canvas.Canvas(nombreDeArchivo,pagesize=A4)
@@ -161,16 +161,16 @@ def imprimirFactura():
         ejeX = 350
         canvasDelPDF.drawString (ejeX,ejeY,"{}".format(j[3]))
         ejeX = 470
-        canvasDelPDF.drawString(ejeX,ejeY,"${}".format(j[3]*j[2]))
+        canvasDelPDF.drawString(ejeX,ejeY,"${}".format(round(j[3]*j[2],2)))
     ejeY = ejeY - 25
     ejeX = 30
     canvasDelPDF.drawString(ejeX,ejeY,'-----------------------------------------------------------------------------------------------------------------------------------------')
     ejeY = ejeY - 25
-    canvasDelPDF.drawString(ejeX,ejeY,"Subtotal: ${}".format(total))
+    canvasDelPDF.drawString(ejeX,ejeY,"Subtotal: ${}".format(round(total,2)))
     ejeY = ejeY - 25
-    canvasDelPDF.drawString(ejeX, ejeY, "IVA: ${}".format(total*0.21))
+    canvasDelPDF.drawString(ejeX, ejeY, "IVA: ${}".format(round(total*0.21,2)))
     ejeY = ejeY - 25
-    canvasDelPDF.drawString(ejeX, ejeY, "Total: ${}".format(total+total*0.21))
+    canvasDelPDF.drawString(ejeX, ejeY, "Total: ${}".format(round(total+total*0.21,2)))
 
     canvasDelPDF.save()
 
