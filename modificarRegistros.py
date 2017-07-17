@@ -25,21 +25,15 @@ def modificarArticulo():
     stockNuevo = funciones_para_modificar_articulo.modificarStock(antiguoStock)#Ver futuros problemas
     areaNueva = funciones_para_modificar_articulo.modificarArea(antiguoIDArea)#Ver futuros problemas
 
-    numeroDeIDDeLaMarca = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeMarcaNuevo)
-    if (numeroDeIDDeLaMarca == None and nombreDeMarcaNuevo!=antiguoIDMarca):
+    numeroDeIDDeLaMarcaNueva = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeMarcaNuevo)
+    if (numeroDeIDDeLaMarcaNueva == None):
         comandoSQL = 'INSERT INTO MARCAS (NOMBRE_MARCA,ALTA_BAJA) VALUES("{}",1)'.format(nombreDeMarcaNuevo)
         funciones_SQLite.ejecutarComandoSQL(comandoSQL, cursorBaseDeDatos)
         funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
-
-    if(nombreDeMarcaNuevo != antiguoIDMarca):
-        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,ARTICULO_MARCA = (SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"),ARTICULO_AREA = {} ,STOCK = {} WHERE CODIGO_DE_BARRA = {} ;'\
-        .format(nombreNuevo,str(precioNuevo),nombreDeMarcaNuevo,str(areaNueva),str(stockNuevo),str(codigoDeBarras))
-
-    else:
-        comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,ARTICULO_MARCA = (SELECT ID_MARCA FROM MARCAS WHERE NOMBRE_MARCA = "{}"),ARTICULO_AREA = {} ,STOCK = {} WHERE CODIGO_DE_BARRA = {} ;'\
-        .format(nombreNuevo,str(precioNuevo),nombreDeMarcaNuevo,str(areaNueva),str(stockNuevo),str(codigoDeBarras))
+        numeroDeIDDeLaMarcaNueva = ingreso_de_datos.determinarNumeroDeMarcaDelArticulo(nombreDeMarcaNuevo)
 
 
+    comandoSQL = 'UPDATE ARTICULOS SET NOMBRE_ARTICULO = "{}", PRECIO = {} ,ARTICULO_MARCA = {},ARTICULO_AREA = {} ,STOCK = {} WHERE CODIGO_DE_BARRA = {} ;'.format(nombreNuevo,str(precioNuevo),numeroDeIDDeLaMarcaNueva,str(areaNueva),str(stockNuevo),str(codigoDeBarras))
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     funciones_SQLite.guardarBaseDeDatos(baseDeDatos)
 

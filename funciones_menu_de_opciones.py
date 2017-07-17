@@ -10,7 +10,7 @@ def ingresoOpcionDelMenuElegida():
     while(not validacionDeIngreso):
         try:
             numeroDeOpcion = int(input("Ingrese el numero de opcion: "))
-            if(numeroDeOpcion > 0 and numeroDeOpcion < 16):
+            if(numeroDeOpcion > 0 and numeroDeOpcion <= 18):
                 validacionDeIngreso = True
                 return numeroDeOpcion
             else:
@@ -51,6 +51,12 @@ def seleccionarOpcionDelMenuElegida(numeroDeOpcion):
         consultarRegistros.buscarPorArea()
     elif(numeroDeOpcion == 12):
         crear_base_de_datos.crearBaseDeDatosNueva()
+    elif(numeroDeOpcion == 16):
+        consultarRegistros.buscarPorFechaDeActualizacion()
+    elif(numeroDeOpcion == 17):
+        consultarRegistros.productosSinStock()
+    elif(numeroDeOpcion == 18):
+        consultarRegistros.totalDelDia()
 
 
 

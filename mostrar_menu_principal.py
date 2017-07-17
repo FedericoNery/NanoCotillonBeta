@@ -27,10 +27,13 @@ def mostrarMenuDeOpciones():
     10. Crear Factura
     11. Imprimir Factura
     12. Crear Nueva Base De Datos(solo para el técnico)
-    13. Consultar Precio
+    13. Consultar Precio del producto
     14. Consultar por Palabra Clave
     15. Consultar por Area
     16. Consultar por Fecha de Actualizacion
+    17. Consultar Productos Sin Stock
+    18. Consultar Total Del Dia
+
 
     """
     print(mensaje)
