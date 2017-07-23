@@ -3,14 +3,20 @@ import ingreso_de_datos
 import datetime
 from funciones_SQLite import baseDeDatos
 from funciones_SQLite import cursorBaseDeDatos
+from datetime import date
 
 def buscarPrecioDeUnArticulo():
     codigoDeBarrasDelArticuloBuscado = ingreso_de_datos.ingresoCodigoDeBarras()
     comandoSQL = 'SELECT ARTICULOS.CODIGO_DE_BARRA, ARTICULOS.NOMBRE_ARTICULO, ARTICULOS.PRECIO,ARTICULOS.STOCK, MARCAS.NOMBRE_MARCA FROM (ARTICULOS) INNER JOIN MARCAS ON ARTICULO_MARCA = ID_MARCA WHERE CODIGO_DE_BARRA ={};'.format(codigoDeBarrasDelArticuloBuscado)
-
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     articuloBuscado = funciones_SQLite.extraerElemento(cursorBaseDeDatos)
-    print(articuloBuscado)
+    if(articuloBuscado == None):
+        print("No se encuentra registrado el articulo!!!")
+    else:
+        encabezado = ["Codigo de Producto", "Nombre/Descripcion","Precio Por Unidad","Cantidad ", "Marca"]
+        print('|{:<20} '.format(encabezado[0]) + '|{:<30} '.format(encabezado[1]) + '|{:<20} '.format(
+        encabezado[2]) + '|{:<9} '.format(encabezado[3]) + '|{:<20}|'.format(encabezado[4]))
+        print('|{:<20} '.format(articuloBuscado[0])+'|{:<30} '.format(articuloBuscado[1])+'|{:<20} '.format(articuloBuscado[2])+'|{:<9} '.format(articuloBuscado[3])+'|{:<20}|'.format(articuloBuscado[4]))
 
 def buscarPorArea():
     numeroDeArea = ingreso_de_datos.ingresoDeArea()
@@ -43,8 +49,11 @@ def productosSinStock():
     print(tablaArticulosSinStock)
 
 def totalDelDia():
-    fechaDeHoy = datetime.datetime.date()
-    comandoSQL = 'SELECT * FROM FACTURAS WHERE FECHA={};'.format(fechaDeHoy)
+    fechaDeHoy = date.today()
+    comandoSQL = 'SELECT ID_FACTURA FROM FACTURAS WHERE FECHA LIKE "%{}%";'.format(fechaDeHoy)
     funciones_SQLite.ejecutarComandoSQL(comandoSQL,cursorBaseDeDatos)
     tablaTotal = funciones_SQLite.extraerTabla(cursorBaseDeDatos)
     print(tablaTotal)
+
+
+

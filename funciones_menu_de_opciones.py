@@ -10,7 +10,7 @@ def ingresoOpcionDelMenuElegida():
     while(not validacionDeIngreso):
         try:
             numeroDeOpcion = int(input("Ingrese el numero de opcion: "))
-            if(numeroDeOpcion > 0 and numeroDeOpcion <= 18):
+            if(numeroDeOpcion > 0 and numeroDeOpcion <= 19):
                 validacionDeIngreso = True
                 return numeroDeOpcion
             else:
@@ -40,7 +40,7 @@ def seleccionarOpcionDelMenuElegida(numeroDeOpcion):
     elif(numeroDeOpcion == 9):
         modificarRegistros.modificarMarca()
     elif(numeroDeOpcion == 10):
-        facturacion.crearFactura()
+        facturacion.crearFacturaVersion2()
     elif(numeroDeOpcion == 11):
         facturacion.imprimirFactura()
     elif(numeroDeOpcion == 13):
@@ -57,6 +57,8 @@ def seleccionarOpcionDelMenuElegida(numeroDeOpcion):
         consultarRegistros.productosSinStock()
     elif(numeroDeOpcion == 18):
         consultarRegistros.totalDelDia()
+    elif(numeroDeOpcion == 19):
+        facturacion.imprimirUltimaFactura()
 
 
 

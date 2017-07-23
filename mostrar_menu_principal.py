@@ -25,7 +25,7 @@ def mostrarMenuDeOpciones():
      8. Modificar Cliente
      9. Modificar Marca
     10. Crear Factura
-    11. Imprimir Factura
+    11. Imprimir Factura por nro de factura
     12. Crear Nueva Base De Datos(solo para el técnico)
     13. Consultar Precio del producto
     14. Consultar por Palabra Clave
@@ -33,6 +33,7 @@ def mostrarMenuDeOpciones():
     16. Consultar por Fecha de Actualizacion
     17. Consultar Productos Sin Stock
     18. Consultar Total Del Dia
+    19. Imprimir última factura
 
 
     """
