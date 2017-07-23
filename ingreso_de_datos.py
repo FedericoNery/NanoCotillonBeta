@@ -171,12 +171,11 @@ def ingresoCantidadDeStock():
 def ingresoYValidacionDeFecha():
     validacionIngreso = False
     while(not validacionIngreso):
-        fechaIngresada = input("Ingrese fecha: ")
-        for format in ['%d/%m/%Y', '%d/%m/%y']:
+        fechaIngresada = input("Ingrese fecha de la siguiente forma: anio-mes-dia ")
+        for format in ['%Y-%m-%d']:
             try:
                 result = time.strptime(fechaIngresada, format)
-                validacionIngreso = True
+                return fechaIngresada
             except:
                 validacionIngreso = False
                 print("ERROR!!")
-    return fechaIngresada
